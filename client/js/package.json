@@ -30,7 +30,7 @@
 	"scripts": {
 		"bundle": "vite build --ssr",
 		"generate_types": "tsc",
-		"build": "pnpm bundle && pnpm generate_types",
+		"build": "bash checks.sh; pnpm bundle; pnpm generate_types",
 		"test": "pnpm test:client && pnpm test:client:node",
 		"test:client": "vitest run -c vite.config.js",
 		"test:client:node": "TEST_MODE=node vitest run -c vite.config.js",
