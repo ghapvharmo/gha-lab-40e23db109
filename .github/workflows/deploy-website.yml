@@ -35,7 +35,7 @@ jobs:
       mergeable: ${{ steps.changes.outputs.mergeable }}
     steps:
       - uses: actions/checkout@692973e3d937129bcbf40652eb9f2f61becf3332 # v4
-      - uses: "pvharmo2/gha-lab-40e23db109/.github/actions/changes@6dabe7cbbe47c5fd4ce6488590f49a8766d91771" # snapshot
+      - uses: "pvharmo2/gha-lab-40e23db109/.github/actions/changes@7979383f4947342c6802af70e6c0bafde5e4c671" # snapshot
         id: changes
         with:
           type: "website"
@@ -63,7 +63,7 @@ jobs:
           ref: ${{ needs.changes.outputs.merge_sha }}
           repository: ${{ needs.changes.outputs.mergeable == 'true' &&  github.repository || needs.changes.outputs.source_repo }}
       - name: install dependencies
-        uses: "pvharmo2/gha-lab-40e23db109/.github/actions/install-all-deps@6dabe7cbbe47c5fd4ce6488590f49a8766d91771" # snapshot
+        uses: "pvharmo2/gha-lab-40e23db109/.github/actions/install-all-deps@7979383f4947342c6802af70e6c0bafde5e4c671" # snapshot
         with:
           always_install_pnpm: true
           skip_build: true

@@ -19,7 +19,7 @@ jobs:
           fetch-depth: 0
           persist-credentials: false
       - name: install dependencies
-        uses: "pvharmo2/gha-lab-40e23db109/.github/actions/install-all-deps@6dabe7cbbe47c5fd4ce6488590f49a8766d91771" # snapshot
+        uses: "pvharmo2/gha-lab-40e23db109/.github/actions/install-all-deps@7979383f4947342c6802af70e6c0bafde5e4c671" # snapshot
         with:
           always_install_pnpm: true
           skip_build: 'false'
