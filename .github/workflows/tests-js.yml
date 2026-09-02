@@ -1,0 +1,80 @@
+name: "test / js"
+
+on:
+  workflow_run:
+    workflows: ["trigger"]
+    types: 
+      - requested
+
+permissions:
+  statuses: write
+
+env:
+  CI: true
+  PLAYWRIGHT_SKIP_BROWSER_DOWNLOAD: "1"
+  NODE_OPTIONS: "--max-old-space-size=4096"
+
+concurrency:
+  group: "${{ github.event.workflow_run.head_repository.full_name }}-${{ github.event.workflow_run.head_branch }}-${{ github.workflow_ref }}"
+  cancel-in-progress: true
+
+jobs:
+  changes:
+    timeout-minutes: 20
+    name: "changes"
+    runs-on: ubuntu-22.04
+    outputs:
+      should_run: ${{ steps.changes.outputs.should_run }}
+      sha: ${{ steps.changes.outputs.sha }}
+      merge_sha: ${{ steps.changes.outputs.merge_sha }}
+      pr_number: ${{ steps.changes.outputs.pr_number }}
+      source_branch: ${{ steps.changes.outputs.source_branch }}
+      source_repo: ${{ steps.changes.outputs.source_repo }}
+      mergeable: ${{ steps.changes.outputs.mergeable }}
+    steps:
+      - uses: actions/checkout@692973e3d937129bcbf40652eb9f2f61becf3332 # v4
+      - uses: "gradio-app/gradio/.github/actions/changes@d4c503a471cfd202c56fbddd99d5da431a4b7478" # main
+        id: changes
+        with:
+          type: "js"
+          token: ${{ secrets.GITHUB_TOKEN }}
+  test-js:
+    timeout-minutes: 20
+    needs: changes
+    if: needs.changes.outputs.should_run == 'true'
+    name: test-js
+    runs-on: ubuntu-22.04
+    steps:
+      - uses: actions/checkout@692973e3d937129bcbf40652eb9f2f61becf3332 # v4
+        with:
+          ref: ${{ needs.changes.outputs.merge_sha }}
+          repository: ${{ needs.changes.outputs.mergeable == 'true' &&  github.repository || needs.changes.outputs.source_repo }}
+      - name: install dependencies
+        uses: "gradio-app/gradio/.github/actions/install-frontend-deps@d4c503a471cfd202c56fbddd99d5da431a4b7478" # main
+        with:
+          always_install_pnpm: true
+      - name: build client
+        run: pnpm --filter @gradio/client build
+      - name: build the wasm module
+        run: pnpm --filter @gradio/wasm build
+      - name: format check
+        run: pnpm format:check
+      - name: lint
+        run: pnpm lint
+      - name: typecheck
+        run: pnpm ts:check
+      - name: unit tests
+        run: pnpm test:run
+      - name: client tests
+        run: pnpm --filter @gradio/client test
+      - name: do check
+        if: always()
+        uses: "gradio-app/github/actions/commit-status@b522cdb7e17e78c269dd5d9862442510bf1ca608" # main
+        with:
+          type: "js"
+          token: ${{ secrets.GITHUB_TOKEN }}
+          pr: ${{ needs.changes.outputs.pr_number }}
+          sha: ${{ needs.changes.outputs.sha }}
+          name: "test / js"
+          result: ${{ job.status }}
+          job_id: "test-js"  

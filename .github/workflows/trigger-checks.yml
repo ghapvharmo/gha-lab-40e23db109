@@ -1,0 +1,20 @@
+name: trigger
+on:
+  pull_request:
+    types: [opened, synchronize, reopened, labeled, unlabeled]
+    branches:
+      - main
+      - 5.0-dev
+  push:
+    branches:
+      - main
+      - 5.0-dev
+
+jobs:
+  checks:
+    timeout-minutes: 20
+    permissions: write-all
+    runs-on: ubuntu-22.04
+    if: github.event.sender.login != 'gradio-pr-bot'
+    steps:
+      - run: echo "Requesting checks"
