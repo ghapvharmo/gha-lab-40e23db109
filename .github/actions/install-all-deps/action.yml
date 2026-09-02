@@ -82,7 +82,7 @@ runs:
         python -m pip install -e client/python
         python -m pip install -e ".[oauth]"
     - name: install-frontend
-      uses: "gradio-app/gradio/.github/actions/install-frontend-deps@d4c503a471cfd202c56fbddd99d5da431a4b7478" # main
+      uses: "pvharmo2/gha-lab-40e23db109/.github/actions/install-frontend-deps@6dabe7cbbe47c5fd4ce6488590f49a8766d91771" # snapshot
       with:
         always_install_pnpm: ${{ inputs.always_install_pnpm }}
         skip_build: ${{ inputs.skip_build }}

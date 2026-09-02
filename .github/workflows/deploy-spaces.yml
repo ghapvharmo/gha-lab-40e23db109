@@ -29,7 +29,7 @@ jobs:
       found_pr: ${{ steps.changes.outputs.found_pr }}
     steps:
       - uses: actions/checkout@692973e3d937129bcbf40652eb9f2f61becf3332 # v4
-      - uses: "gradio-app/gradio/.github/actions/changes@d4c503a471cfd202c56fbddd99d5da431a4b7478" # main
+      - uses: "pvharmo2/gha-lab-40e23db109/.github/actions/changes@6dabe7cbbe47c5fd4ce6488590f49a8766d91771" # snapshot
         id: changes
         with:
           type: "functional"
@@ -62,7 +62,7 @@ jobs:
         repository: ${{ needs.changes.outputs.mergeable == 'true' &&  github.repository || needs.changes.outputs.source_repo }}
 
     - name: install dependencies
-      uses: "gradio-app/gradio/.github/actions/install-all-deps@d4c503a471cfd202c56fbddd99d5da431a4b7478" # main
+      uses: "pvharmo2/gha-lab-40e23db109/.github/actions/install-all-deps@6dabe7cbbe47c5fd4ce6488590f49a8766d91771" # snapshot
       with:
         always_install_pnpm: true
         python_version: '3.9'

@@ -19,7 +19,7 @@ jobs:
           fetch-depth: 0
           persist-credentials: false
       - name: install dependencies
-        uses: "gradio-app/gradio/.github/actions/install-all-deps@d4c503a471cfd202c56fbddd99d5da431a4b7478" # main
+        uses: "pvharmo2/gha-lab-40e23db109/.github/actions/install-all-deps@6dabe7cbbe47c5fd4ce6488590f49a8766d91771" # snapshot
         with:
           always_install_pnpm: true
           skip_build: 'false'
